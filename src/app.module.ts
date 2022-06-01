@@ -5,6 +5,7 @@ import { config } from './config/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseConfig } from './config/database.config';
+import { SubscribersModule } from './modules/subscribers/subscribers.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { DatabaseConfig } from './config/database.config';
       imports: [ConfigModule],
       useClass: DatabaseConfig,
     }),
+    SubscribersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
