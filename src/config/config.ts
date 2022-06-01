@@ -1,3 +1,5 @@
+import { Subscriber } from 'src/entities/subscriber.entity';
+
 export const config = () => ({
   database: {
     type: 'mysql',
@@ -6,7 +8,7 @@ export const config = () => ({
     username: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
-    entities: [],
+    entities: [Subscriber],
     keepConnectionAlive: true,
     synchronize: false,
     logging: 'all',

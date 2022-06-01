@@ -17,19 +17,29 @@ export class SubscribersService {
     private subscribersRepository: SubscribersRepository,
   ) {}
 
-  async getSubscribers(filterDto: GetSubscribersFilterDo, options: IPaginationOptions): Promise<Pagination<Subscriber>> {
-    const results = await this.subscribersRepository.getSubscribers(filterDto, options);
+  async getSubscribers(
+    filterDto: GetSubscribersFilterDo,
+    options: IPaginationOptions,
+  ): Promise<Pagination<Subscriber>> {
+    const results = await this.subscribersRepository.getSubscribers(
+      filterDto,
+      options,
+    );
     const cipher = aes256.createCipher(process.env.APP_KEY);
 
     return new Pagination(
-      await Promise.all(results.items.map(async (item: Subscriber) => {
-        item['psid'] = cipher.decrypt(item['psid'].toString());
-        item['first_name'] = cipher.decrypt(item['first_name'].toString());
-        item['last_name'] = cipher.decrypt(item['last_name'].toString());
-        item['email'] = item['email'] ? cipher.decrypt(item['email'].toString()) : "";
+      await Promise.all(
+        results.items.map(async (item: Subscriber) => {
+          item['psid'] = cipher.decrypt(item['psid'].toString());
+          item['first_name'] = cipher.decrypt(item['first_name'].toString());
+          item['last_name'] = cipher.decrypt(item['last_name'].toString());
+          item['email'] = item['email']
+            ? cipher.decrypt(item['email'].toString())
+            : '';
 
-        return item;
-      })),
+          return item;
+        }),
+      ),
       results.meta,
       results.links,
     );
@@ -46,12 +56,14 @@ export class SubscribersService {
     data['psid'] = cipher.decrypt(data['psid'].toString());
     data['first_name'] = cipher.decrypt(data['first_name'].toString());
     data['last_name'] = cipher.decrypt(data['last_name'].toString());
-    data['email'] = data['email'] ? cipher.decrypt(data['email'].toString()) : "";
+    data['email'] = data['email']
+      ? cipher.decrypt(data['email'].toString())
+      : '';
 
     return {
-        statusCode: 200,
-        message: "subscriber found",
-        data: data
+      statusCode: 200,
+      message: 'subscriber found',
+      data: data,
     };
   }
 
@@ -66,31 +78,39 @@ export class SubscribersService {
     data['psid'] = cipher.decrypt(data['psid'].toString());
     data['first_name'] = cipher.decrypt(data['first_name'].toString());
     data['last_name'] = cipher.decrypt(data['last_name'].toString());
-    data['email'] = data['email'] ? cipher.decrypt(data['email'].toString()) : "";
+    data['email'] = data['email']
+      ? cipher.decrypt(data['email'].toString())
+      : '';
 
     return {
-        statusCode: 200,
-        message: "subscriber found",
-        data: data
+      statusCode: 200,
+      message: 'subscriber found',
+      data: data,
     };
   }
 
-  async createSubscriber(createSubscriberDto: CreateSubscriberDto): Promise<any> {
+  async createSubscriber(
+    createSubscriberDto: CreateSubscriberDto,
+  ): Promise<any> {
     const cipher = aes256.createCipher(process.env.APP_KEY);
-    const data = await this.subscribersRepository.createSubscriber(createSubscriberDto);
+    const data = await this.subscribersRepository.createSubscriber(
+      createSubscriberDto,
+    );
 
     data['psid'] = cipher.decrypt(data['psid'].toString());
     data['first_name'] = cipher.decrypt(data['first_name'].toString());
     data['last_name'] = cipher.decrypt(data['last_name'].toString());
 
     return {
-        statusCode: 201,
-        message: "subscriber created",
-        data: data
+      statusCode: 201,
+      message: 'subscriber created',
+      data: data,
     };
   }
 
-  async updateSubscriber(updateSubscriberDto: UpdateSubscriberDto): Promise<any> {
+  async updateSubscriber(
+    updateSubscriberDto: UpdateSubscriberDto,
+  ): Promise<any> {
     const { psid } = updateSubscriberDto;
     const cipher = aes256.createCipher(process.env.APP_KEY);
     const subscriber = await this.subscribersRepository.getByPsid(psid);
@@ -99,17 +119,22 @@ export class SubscribersService {
       throw new NotFoundException(`Subscriber with PSID ${psid} not found`);
     }
 
-    const data = await this.subscribersRepository.updateSubscriber(subscriber, updateSubscriberDto);
-    
+    const data = await this.subscribersRepository.updateSubscriber(
+      subscriber,
+      updateSubscriberDto,
+    );
+
     data['psid'] = cipher.decrypt(data['psid'].toString());
     data['first_name'] = cipher.decrypt(data['first_name'].toString());
     data['last_name'] = cipher.decrypt(data['last_name'].toString());
-    data['email'] = data['email'] ? cipher.decrypt(data['email'].toString()) : "";
+    data['email'] = data['email']
+      ? cipher.decrypt(data['email'].toString())
+      : '';
 
     return {
-        statusCode: 200,
-        message: "subscriber updated",
-        data: data
+      statusCode: 200,
+      message: 'subscriber updated',
+      data: data,
     };
   }
 
