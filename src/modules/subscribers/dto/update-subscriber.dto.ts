@@ -6,10 +6,6 @@ export class UpdateSubscriberDto {
 
   @IsOptional()
   @IsNotEmpty()
-  is_terms_agree: number;
-
-  @IsOptional()
-  @IsNotEmpty()
   gender: string;
 
   @IsOptional()
@@ -30,5 +26,5 @@ export class UpdateSubscriberDto {
 
   @IsOptional()
   @IsNotEmpty()
-  avatar: string;
+  mobile_number: number;
 }

@@ -6,6 +6,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseConfig } from './config/database.config';
 import { SubscribersModule } from './modules/subscribers/subscribers.module';
+import { BagsModule } from './modules/bags/bags.module';
+import { SubscribersAddressesModule } from './modules/subscribers-addresses/subscribers-addresses.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { SubscribersModule } from './modules/subscribers/subscribers.module';
       useClass: DatabaseConfig,
     }),
     SubscribersModule,
+    BagsModule,
+    SubscribersAddressesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

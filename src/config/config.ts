@@ -1,3 +1,5 @@
+import { Bag } from 'src/entities/bag.entity';
+import { SubscribersAddresses } from 'src/entities/subscriber-address.entity';
 import { Subscriber } from 'src/entities/subscriber.entity';
 
 export const config = () => ({
@@ -8,7 +10,7 @@ export const config = () => ({
     username: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
-    entities: [Subscriber],
+    entities: [Subscriber, Bag, SubscribersAddresses],
     keepConnectionAlive: true,
     synchronize: false,
     logging: 'all',

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Repository, EntityRepository, Brackets } from 'typeorm';
+import { Repository, EntityRepository } from 'typeorm';
 import { Subscriber } from '../../entities/subscriber.entity';
-import { GetSubscribersFilterDo } from './dto/get-subscribers-filter.dto';
 import { CreateSubscriberDto } from './dto/create-subscriber.dto';
 import { UpdateSubscriberDto } from './dto/update-subscriber.dto';
 import {
@@ -14,12 +13,14 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import * as crypto from 'crypto';
+import { GetSubscribersFilterDto } from './dto/get-subscribers-filter.dto';
 const aes256 = require('aes256');
+const { uuid } = require('uuidv4');
 
 @EntityRepository(Subscriber)
 export class SubscribersRepository extends Repository<Subscriber> {
   async getSubscribers(
-    filterDto: GetSubscribersFilterDo,
+    filterDto: GetSubscribersFilterDto,
     options: IPaginationOptions,
   ): Promise<Pagination<Subscriber>> {
     const { gender } = filterDto;
@@ -60,10 +61,12 @@ export class SubscribersRepository extends Repository<Subscriber> {
     createSubscriberDto: CreateSubscriberDto,
   ): Promise<Subscriber> {
     const cipher = aes256.createCipher(process.env.APP_KEY);
-    const { psid, first_name, last_name, avatar } = createSubscriberDto;
+    const { psid, brand_id, first_name, last_name } = createSubscriberDto;
 
     const subscriber = new Subscriber();
     subscriber.psid = cipher.encrypt(psid);
+    subscriber.brand_id = brand_id;
+    subscriber.uuid = uuid();
     subscriber.psid_hashed = crypto
       .createHash('sha256')
       .update(psid)
@@ -78,11 +81,6 @@ export class SubscribersRepository extends Repository<Subscriber> {
       .createHash('sha256')
       .update(last_name)
       .digest('base64');
-
-    // if (avatar) {
-    //   subscriber.avatar = avatar;
-    // }
-
     try {
       await subscriber.save();
     } catch (e) {
@@ -101,12 +99,7 @@ export class SubscribersRepository extends Repository<Subscriber> {
     updateSubscriberDto: UpdateSubscriberDto,
   ): Promise<Subscriber> {
     const cipher = aes256.createCipher(process.env.APP_KEY);
-    const { is_terms_agree, gender, email, birthday, avatar } =
-      updateSubscriberDto;
-
-    // if (is_terms_agree) {
-    //   subscriber.is_terms_agree = is_terms_agree;
-    // }
+    const { gender, email, birthday, mobile_number } = updateSubscriberDto;
 
     if (gender) {
       subscriber.gender = gender;
@@ -124,9 +117,9 @@ export class SubscribersRepository extends Repository<Subscriber> {
       subscriber.birthday = birthday;
     }
 
-    // if (avatar) {
-    //   subscriber.avatar = avatar;
-    // }
+    if (mobile_number) {
+      subscriber.mobile_number = mobile_number;
+    }
 
     try {
       await subscriber.save();

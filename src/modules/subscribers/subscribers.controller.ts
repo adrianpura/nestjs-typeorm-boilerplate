@@ -4,7 +4,6 @@ import {
   Post,
   Body,
   Param,
-  Delete,
   Patch,
   Query,
   UsePipes,
@@ -12,12 +11,12 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { SubscribersService } from './subscribers.service';
-import { GetSubscribersFilterDo } from './dto/get-subscribers-filter.dto';
 import { CreateSubscriberDto } from './dto/create-subscriber.dto';
 import { UpdateSubscriberDto } from './dto/update-subscriber.dto';
 import { Subscriber } from './../../entities/subscriber.entity';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { ConfigService } from '@nestjs/config';
+import { GetSubscribersFilterDto } from './dto/get-subscribers-filter.dto';
 
 @Controller('subscribers')
 export class SubscribersController {
@@ -28,7 +27,7 @@ export class SubscribersController {
 
   @Get()
   getSubscribers(
-    @Query(ValidationPipe) filterDto: GetSubscribersFilterDo,
+    @Query(ValidationPipe) filterDto: GetSubscribersFilterDto,
     @Query('page') page = 1,
     @Query('limit') limit = 10,
   ): Promise<Pagination<Subscriber>> {

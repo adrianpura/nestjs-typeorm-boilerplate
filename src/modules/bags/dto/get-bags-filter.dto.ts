@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
-export class GetSubscribersFilterDto {
+export class GetBagsFilterDto {
   @IsOptional()
   @IsNotEmpty()
-  gender: string;
+  subscriber_id: number;
 
   @IsOptional()
   @IsNotEmpty()

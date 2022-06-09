@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
-import { GetSubscribersFilterDo } from './dto/get-subscribers-filter.dto';
 import { CreateSubscriberDto } from './dto/create-subscriber.dto';
 import { UpdateSubscriberDto } from './dto/update-subscriber.dto';
 import { SubscribersRepository } from './subscribers.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Subscriber } from './../../entities/subscriber.entity';
 import { Pagination, IPaginationOptions } from 'nestjs-typeorm-paginate';
+import { GetSubscribersFilterDto } from './dto/get-subscribers-filter.dto';
 const aes256 = require('aes256');
 
 @Injectable()
@@ -18,7 +17,7 @@ export class SubscribersService {
   ) {}
 
   async getSubscribers(
-    filterDto: GetSubscribersFilterDo,
+    filterDto: GetSubscribersFilterDto,
     options: IPaginationOptions,
   ): Promise<Pagination<Subscriber>> {
     const results = await this.subscribersRepository.getSubscribers(
@@ -33,9 +32,9 @@ export class SubscribersService {
           item['psid'] = cipher.decrypt(item['psid'].toString());
           item['first_name'] = cipher.decrypt(item['first_name'].toString());
           item['last_name'] = cipher.decrypt(item['last_name'].toString());
-          item['email'] = item['email']
-            ? cipher.decrypt(item['email'].toString())
-            : '';
+          // item['email'] = item['email']
+          //   ? cipher.decrypt(item['email'].toString())
+          //   : '';
 
           return item;
         }),
@@ -56,9 +55,9 @@ export class SubscribersService {
     data['psid'] = cipher.decrypt(data['psid'].toString());
     data['first_name'] = cipher.decrypt(data['first_name'].toString());
     data['last_name'] = cipher.decrypt(data['last_name'].toString());
-    data['email'] = data['email']
-      ? cipher.decrypt(data['email'].toString())
-      : '';
+    // data['email'] = data['email']
+    //   ? cipher.decrypt(data['email'].toString())
+    //   : '';
 
     return {
       statusCode: 200,
@@ -78,9 +77,9 @@ export class SubscribersService {
     data['psid'] = cipher.decrypt(data['psid'].toString());
     data['first_name'] = cipher.decrypt(data['first_name'].toString());
     data['last_name'] = cipher.decrypt(data['last_name'].toString());
-    data['email'] = data['email']
-      ? cipher.decrypt(data['email'].toString())
-      : '';
+    // data['email'] = data['email']
+    //   ? cipher.decrypt(data['email'].toString())
+    //   : '';
 
     return {
       statusCode: 200,
